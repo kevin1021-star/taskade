@@ -34,6 +34,28 @@ function App() {
     localStorage.setItem('hacker-focus-time', totalFocusTime.toString());
   }, [totalFocusTime]);
 
+  // Meeting auto-complete check
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setTasks(currentTasks => {
+        let changed = false;
+        const newTasks = currentTasks.map(t => {
+          if (t.type === 'meeting' && !t.completed && t.dueEnd) {
+            const endDate = new Date(t.dueEnd);
+            if (now >= endDate) {
+              changed = true;
+              return { ...t, completed: true };
+            }
+          }
+          return t;
+        });
+        return changed ? newTasks : currentTasks;
+      });
+    }, 30000); // Check every 30s
+    return () => clearInterval(interval);
+  }, []);
+
   // Global total focus timer updates triggered from individual TaskItems
   const addGlobalFocusTime = (seconds) => {
     setTotalFocusTime(prev => prev + seconds);
@@ -45,6 +67,7 @@ function App() {
       { 
         id: Date.now().toString(), 
         text, 
+        type: 'task',
         completed: false, 
         priority, 
         dueDate, 
@@ -70,6 +93,14 @@ function App() {
   const filteredTasks = tasks.filter(t => {
     if (filter === 'Active') return !t.completed;
     if (filter === 'Completed') return t.completed;
+    if (filter === 'Ongoing Meets') {
+      if (t.type !== 'meeting' || t.completed) return false;
+      const now = new Date();
+      if (!t.dueDate) return false;
+      const start = new Date(t.dueDate);
+      const end = t.dueEnd ? new Date(t.dueEnd) : new Date(start.getTime() + 60*60*1000); // 1hr fallback
+      return now >= start && now <= end;
+    }
     return true;
   });
 
@@ -105,7 +136,7 @@ function App() {
 
         <div className="actions-bar">
           <div className="filter-tabs">
-            {['All', 'Active', 'Completed'].map(f => (
+            {['All', 'Active', 'Ongoing Meets', 'Completed'].map(f => (
               <button 
                 key={f} 
                 className={`filter-btn ${filter === f ? 'active' : ''}`}
@@ -155,4 +186,3 @@ function App() {
 }
 
 export default App;
-
