@@ -128,7 +128,7 @@ function App() {
           </div>
         </div>
 
-        <audio ref={audioRef} src="https://coderadio-admin.freecodecamp.org/radio/8000/radio.mp3" preload="none"></audio>
+        <audio ref={audioRef} src="https://coderadio-admin-v2.freecodecamp.org/listen/coderadio/radio.mp3" preload="none"></audio>
 
         <TaskInput onAdd={addTask} />
         
@@ -155,3 +155,4 @@ function App() {
 }
 
 export default App;
+
