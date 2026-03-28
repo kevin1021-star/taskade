@@ -601,3 +601,30 @@ body {
   padding: 0.75rem 2rem;
   font-size: 1.1rem;
 }
+
+/* Meeting Specific Styles */
+.meeting-item {
+  border-left: 4px solid #00f3ff;
+  background: rgba(0, 243, 255, 0.05);
+}
+
+.meeting-item:hover {
+  background: rgba(0, 243, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+.meeting-item::before {
+  background: #00f3ff;
+}
+
+.meeting-item:hover::before {
+  background: #00f3ff;
+  box-shadow: 0 0 20px #00f3ff;
+}
+
+.badge.type-meeting {
+  border-color: #00f3ff;
+  color: #00f3ff;
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+  animation: pulse-ring 2s infinite alternate;
+}
