@@ -46,7 +46,7 @@ export default function TaskItem({ task, onToggle, onDelete, onTimeUpdate }) {
   };
 
   return (
-    <li className={`task-item ${task.completed ? 'completed' : ''}`}>
+    <li className={`task-item ${task.completed ? 'completed' : ''} ${task.type === 'meeting' ? 'meeting-item' : ''}`}>
       <input 
         type="checkbox" 
         className="task-checkbox" 
@@ -58,6 +58,11 @@ export default function TaskItem({ task, onToggle, onDelete, onTimeUpdate }) {
         <span className="task-text">{task.text}</span>
         
         <div className="task-meta">
+          {task.type === 'meeting' && (
+            <span className="badge type-meeting">
+              [MEETING]
+            </span>
+          )}
           {task.priority !== 'low' && (
             <span className={`badge prio-${task.priority}`}>
               [{task.priority.toUpperCase()}]
