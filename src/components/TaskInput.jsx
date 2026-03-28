@@ -42,11 +42,11 @@ export default function TaskInput({ onAdd }) {
           <option value="high">PRIO: HIGH</option>
         </select>
         <input 
-          type="date" 
+          type="datetime-local" 
           className="date-input" 
           value={dueDate} 
           onChange={(e) => setDueDate(e.target.value)}
-          title="Due Date"
+          title="Due Date and Time"
         />
         <input 
           type="number" 
