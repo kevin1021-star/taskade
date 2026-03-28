@@ -39,10 +39,22 @@ export default function TaskItem({ task, onToggle, onDelete, onTimeUpdate }) {
     return `${s}s`;
   };
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return null;
-    const date = new Date(dateStr);
-    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  const formatDateTime = (startStr, endStr) => {
+    if (!startStr) return null;
+    const start = new Date(startStr);
+    const datePart = start.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    const timePart = start.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    
+    if (endStr) {
+      const end = new Date(endStr);
+      if (start.toDateString() === end.toDateString()) {
+         return `${datePart} | ${timePart} - ${end.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}`;
+      }
+      return `${datePart} | ${timePart} to ${end.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`;
+    }
+    
+    if (startStr.length === 10) return datePart;
+    return `${datePart} | ${timePart}`;
   };
 
   return (
@@ -70,7 +82,8 @@ export default function TaskItem({ task, onToggle, onDelete, onTimeUpdate }) {
           )}
           {task.dueDate && (
             <span className="badge due-date">
-              DUE: {formatDate(task.dueDate)}
+              {task.type === 'meeting' ? 'MEET: ' : 'DUE: '} 
+              {formatDateTime(task.dueDate, task.dueEnd)}
             </span>
           )}
           {task.estimatedTime > 0 && (
